@@ -44,7 +44,7 @@
       <main class="lg:pl-72 pt-14">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
           <!-- Base URL Section -->
-          <section class="border border-vp-border dark:border-vp-dark-border rounded-xl bg-vp-bg-soft dark:bg-vp-dark-bg-mute p-6 space-y-3">
+          <section class="border border-vp-border dark:border-vp-dark-border rounded-xl bg-vp-bg dark:bg-vp-dark-bg-mute p-6 space-y-3">
             <h1 class="text-2xl font-bold">VoltexaHub API Reference</h1>
             <p class="text-vp-text-2 dark:text-vp-dark-text-2 text-sm">Complete reference for the VoltexaHub community platform API.</p>
             <div>
@@ -57,7 +57,7 @@
           </section>
 
           <!-- Authentication Explanation -->
-          <section class="border border-vp-border dark:border-vp-dark-border rounded-xl bg-vp-bg-soft dark:bg-vp-dark-bg-mute p-6 space-y-3">
+          <section class="border border-vp-border dark:border-vp-dark-border rounded-xl bg-vp-bg dark:bg-vp-dark-bg-mute p-6 space-y-3">
             <h2 class="text-lg font-bold">Authentication</h2>
             <p class="text-vp-text-2 dark:text-vp-dark-text-2 text-sm">
               Authenticated endpoints require a Bearer token in the <code class="text-accent-light bg-vp-bg-mute dark:bg-vp-dark-bg px-1.5 py-0.5 rounded text-xs">Authorization</code> header.
