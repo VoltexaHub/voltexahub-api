@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ dark: isDark }" class="min-h-screen">
+  <div class="min-h-screen">
     <div class="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       <!-- Top Navbar -->
       <header class="fixed top-0 left-0 right-0 z-50 h-14 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 flex items-center px-4 lg:px-6">
@@ -89,13 +89,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { endpointGroups } from './data/endpoints.js'
 import SidebarNav from './components/SidebarNav.vue'
 import EndpointCard from './components/EndpointCard.vue'
 
 const isDark = ref(true)
 const search = ref('')
+
+// Apply dark class to <html> so Tailwind dark mode works
+onMounted(() => document.documentElement.classList.toggle('dark', isDark.value))
+watch(isDark, val => document.documentElement.classList.toggle('dark', val))
 const sidebarOpen = ref(false)
 
 const filteredGroups = computed(() => {
