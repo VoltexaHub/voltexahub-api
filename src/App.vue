@@ -94,12 +94,15 @@ import { endpointGroups } from './data/endpoints.js'
 import SidebarNav from './components/SidebarNav.vue'
 import EndpointCard from './components/EndpointCard.vue'
 
-const isDark = ref(true)
+const isDark = ref(localStorage.getItem('api-theme') !== 'light')
 const search = ref('')
 
-// Apply dark class to <html> so Tailwind dark mode works
+// Apply dark class to <html> + persist preference
 onMounted(() => document.documentElement.classList.toggle('dark', isDark.value))
-watch(isDark, val => document.documentElement.classList.toggle('dark', val))
+watch(isDark, val => {
+  document.documentElement.classList.toggle('dark', val)
+  localStorage.setItem('api-theme', val ? 'dark' : 'light')
+})
 const sidebarOpen = ref(false)
 
 const filteredGroups = computed(() => {
