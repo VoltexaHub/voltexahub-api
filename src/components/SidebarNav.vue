@@ -3,7 +3,7 @@
     <div v-for="group in groups" :key="group.id">
       <button
         @click="toggle(group.id)"
-        class="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-gray-300 hover:text-white hover:bg-gray-800/50 rounded-md transition-colors"
+        class="w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-vp-text dark:text-vp-dark-text-2 hover:text-accent dark:hover:text-vp-dark-text hover:bg-vp-bg-mute dark:hover:bg-vp-dark-bg-mute rounded-md transition-colors"
       >
         <span>{{ group.name }}</span>
         <svg
@@ -19,10 +19,10 @@
           :key="ep.id"
           :href="'#' + ep.id"
           @click="$emit('navigate')"
-          class="flex items-center gap-2 px-3 py-1.5 text-xs rounded-md hover:bg-gray-800/50 transition-colors group"
+          class="flex items-center gap-2 px-3 py-1.5 text-xs rounded-md hover:bg-vp-bg-mute dark:hover:bg-vp-dark-bg-mute transition-colors group"
         >
           <span :class="methodColor(ep.method)" class="font-mono font-bold text-[10px] uppercase w-10 shrink-0">{{ ep.method }}</span>
-          <span class="text-gray-400 group-hover:text-gray-200 truncate">{{ ep.path }}</span>
+          <span class="text-vp-text-2 dark:text-vp-dark-text-2 group-hover:text-vp-text dark:group-hover:text-vp-dark-text truncate">{{ ep.path }}</span>
         </a>
       </div>
     </div>
@@ -50,6 +50,6 @@ function methodColor(method) {
     PATCH: 'text-amber-400',
     DELETE: 'text-red-400',
   }
-  return map[method] || 'text-gray-400'
+  return map[method] || 'text-vp-text-3'
 }
 </script>
