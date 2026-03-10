@@ -1,0 +1,92 @@
+<template>
+  <div :id="endpoint.id" class="scroll-mt-20 border border-gray-700/50 rounded-xl bg-gray-900/50 overflow-hidden">
+    <!-- Header -->
+    <div class="px-6 py-4 border-b border-gray-700/50 flex flex-wrap items-center gap-3">
+      <MethodBadge :method="endpoint.method" />
+      <code class="text-sm font-mono text-gray-200">{{ endpoint.path }}</code>
+      <AuthBadge :required="endpoint.auth" />
+    </div>
+
+    <!-- Body -->
+    <div class="px-6 py-5 space-y-5">
+      <p class="text-gray-300 text-sm">{{ endpoint.description }}</p>
+
+      <!-- Params Table -->
+      <div v-if="endpoint.params && endpoint.params.length > 0">
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Parameters</h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-xs uppercase tracking-wider text-gray-500 border-b border-gray-700/50">
+                <th class="pb-2 pr-4 font-medium">Name</th>
+                <th class="pb-2 pr-4 font-medium">Location</th>
+                <th class="pb-2 pr-4 font-medium">Type</th>
+                <th class="pb-2 pr-4 font-medium">Required</th>
+                <th class="pb-2 font-medium">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="param in endpoint.params" :key="param.name" class="border-b border-gray-800/50">
+                <td class="py-2 pr-4"><code class="text-accent-light text-xs">{{ param.name }}</code></td>
+                <td class="py-2 pr-4 text-gray-400 text-xs">{{ param.location }}</td>
+                <td class="py-2 pr-4 text-gray-400 text-xs font-mono">{{ param.type }}</td>
+                <td class="py-2 pr-4">
+                  <span v-if="param.required" class="text-amber-400 text-xs font-medium">required</span>
+                  <span v-else class="text-gray-500 text-xs">optional</span>
+                </td>
+                <td class="py-2 text-gray-400 text-xs">{{ param.description }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Request Example -->
+      <div>
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Example Request</h4>
+        <CodeBlock :code="endpoint.exampleRequest" />
+      </div>
+
+      <!-- Response Example -->
+      <div>
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Example Response</h4>
+        <div class="relative rounded-lg overflow-hidden border border-gray-700/50">
+          <button
+            @click="copyResponse"
+            class="absolute top-2 right-2 p-1.5 rounded text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
+            :title="copiedRes ? 'Copied!' : 'Copy'"
+          >
+            <svg v-if="!copiedRes" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+            <svg v-else class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+          </button>
+          <pre class="p-4 overflow-x-auto text-sm leading-relaxed" style="background: #0f172a"><code class="language-json" v-html="highlightedResponse"></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+import hljs from 'highlight.js/lib/core'
+import json from 'highlight.js/lib/languages/json'
+import MethodBadge from './MethodBadge.vue'
+import AuthBadge from './AuthBadge.vue'
+import CodeBlock from './CodeBlock.vue'
+
+hljs.registerLanguage('json', json)
+
+const props = defineProps({ endpoint: Object })
+const copiedRes = ref(false)
+
+const highlightedResponse = computed(() => {
+  if (!props.endpoint.exampleResponse) return ''
+  return hljs.highlight(props.endpoint.exampleResponse, { language: 'json' }).value
+})
+
+function copyResponse() {
+  navigator.clipboard.writeText(props.endpoint.exampleResponse || '')
+  copiedRes.value = true
+  setTimeout(() => { copiedRes.value = false }, 2000)
+}
+</script>
