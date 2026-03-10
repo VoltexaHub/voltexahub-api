@@ -11,18 +11,35 @@
     <div class="px-6 py-5 space-y-5">
       <p class="text-vp-text-2 dark:text-vp-dark-text-2 text-sm">{{ endpoint.description }}</p>
 
-      <!-- Params Table -->
+      <!-- Params — stacked cards on mobile, table on md+ -->
       <div v-if="endpoint.params && endpoint.params.length > 0">
         <h4 class="text-xs font-semibold uppercase tracking-wider text-vp-text-3 dark:text-vp-dark-text-3 mb-2">Parameters</h4>
-        <div class="overflow-x-auto rounded-lg border border-vp-border dark:border-vp-dark-border">
+
+        <!-- Mobile: stacked -->
+        <div class="md:hidden space-y-2">
+          <div v-for="param in endpoint.params" :key="param.name"
+            class="rounded-lg border border-vp-border dark:border-vp-dark-border p-3 space-y-1 bg-vp-bg-soft dark:bg-vp-dark-bg-mute">
+            <div class="flex items-center gap-2 flex-wrap">
+              <code class="text-purple-600 dark:text-purple-400 text-xs bg-purple-50 dark:bg-purple-900/20 px-1.5 py-0.5 rounded">{{ param.name }}</code>
+              <span class="text-xs font-mono text-vp-text-3 dark:text-vp-dark-text-3">{{ param.type }}</span>
+              <span class="text-xs text-vp-text-3 dark:text-vp-dark-text-3">· {{ param.location }}</span>
+              <span v-if="param.required" class="text-amber-600 dark:text-amber-400 text-xs font-medium">required</span>
+              <span v-else class="text-vp-text-3 dark:text-vp-dark-text-3 text-xs">optional</span>
+            </div>
+            <p class="text-xs text-vp-text-2 dark:text-vp-dark-text-2">{{ param.description }}</p>
+          </div>
+        </div>
+
+        <!-- Desktop: table -->
+        <div class="hidden md:block rounded-lg border border-vp-border dark:border-vp-dark-border overflow-hidden">
           <table class="w-full text-sm">
             <thead>
               <tr class="text-left text-xs uppercase tracking-wider text-vp-text-3 dark:text-vp-dark-text-3 border-b border-vp-border dark:border-vp-dark-border bg-vp-bg-mute dark:bg-vp-dark-bg-soft">
-                <th class="pb-2 pt-2 px-3 font-medium">Name</th>
-                <th class="pb-2 pt-2 px-3 font-medium">Location</th>
-                <th class="pb-2 pt-2 px-3 font-medium">Type</th>
-                <th class="pb-2 pt-2 px-3 font-medium">Required</th>
-                <th class="pb-2 pt-2 px-3 font-medium">Description</th>
+                <th class="py-2 px-3 font-medium">Name</th>
+                <th class="py-2 px-3 font-medium">In</th>
+                <th class="py-2 px-3 font-medium">Type</th>
+                <th class="py-2 px-3 font-medium">Required</th>
+                <th class="py-2 px-3 font-medium">Description</th>
               </tr>
             </thead>
             <tbody>
@@ -34,7 +51,7 @@
                   <span v-if="param.required" class="text-amber-600 dark:text-amber-400 text-xs font-medium">required</span>
                   <span v-else class="text-vp-text-3 dark:text-vp-dark-text-3 text-xs">optional</span>
                 </td>
-                <td class="py-2 px-3 text-vp-text-3 dark:text-vp-dark-text-2 text-xs">{{ param.description }}</td>
+                <td class="py-2 px-3 text-vp-text-2 dark:text-vp-dark-text-2 text-xs">{{ param.description }}</td>
               </tr>
             </tbody>
           </table>
