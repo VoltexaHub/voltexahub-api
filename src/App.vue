@@ -89,7 +89,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, provide } from 'vue'
 import { endpointGroups } from './data/endpoints.js'
 import SidebarNav from './components/SidebarNav.vue'
 import EndpointCard from './components/EndpointCard.vue'
@@ -98,6 +98,8 @@ const isDark = ref(localStorage.getItem('api-theme') !== 'light')
 const search = ref('')
 
 // Apply dark class to <html> + persist preference
+provide('isDark', isDark)
+
 onMounted(() => document.documentElement.classList.toggle('dark', isDark.value))
 watch(isDark, val => {
   document.documentElement.classList.toggle('dark', val)

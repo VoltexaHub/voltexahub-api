@@ -76,7 +76,7 @@
             <svg v-if="!copiedRes" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
             <svg v-else class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
           </button>
-          <pre class="p-4 overflow-x-auto text-sm leading-relaxed" style="background: #0f172a"><code class="language-json" v-html="highlightedResponse"></code></pre>
+          <pre class="p-4 overflow-x-auto text-sm leading-relaxed" :style="{ background: isDark ? '#0f172a' : '#f3f4f6' }"><code class="language-json" v-html="highlightedResponse"></code></pre>
         </div>
       </div>
     </div>
@@ -84,7 +84,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 import hljs from 'highlight.js/lib/core'
 import json from 'highlight.js/lib/languages/json'
 import MethodBadge from './MethodBadge.vue'
@@ -93,6 +93,7 @@ import CodeBlock from './CodeBlock.vue'
 
 hljs.registerLanguage('json', json)
 
+const isDark = inject('isDark')
 const props = defineProps({ endpoint: Object })
 const copiedRes = ref(false)
 
