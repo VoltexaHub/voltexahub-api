@@ -1148,4 +1148,212 @@ export const endpointGroups = [
       },
     ],
   },
+  {
+    name: 'SEO',
+    id: 'seo',
+    endpoints: [
+      {
+        method: 'GET',
+        path: '/sitemap.xml',
+        id: 'seo-sitemap',
+        description: 'Returns the XML sitemap for the forum. Includes all public non-noindex forums and up to 1000 recent threads. Returns 404 if sitemap is disabled in settings.',
+        auth: false,
+        params: [],
+        exampleRequest: {
+          curl: `curl ${BASE}/sitemap.xml`,
+          js: `const { data } = await axios.get('${BASE}/sitemap.xml');`,
+        },
+        exampleResponse: `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="application/xslt+xml" href="/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://community.voltexahub.com/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://community.voltexahub.com/thread/welcome-to-voltexahub</loc>
+    <lastmod>2026-03-09</lastmod>
+    <priority>0.7</priority>
+  </url>
+</urlset>`,
+      },
+      {
+        method: 'GET',
+        path: '/robots.txt',
+        id: 'seo-robots',
+        description: 'Returns the robots.txt file. Content is configurable from Admin → Settings → SEO.',
+        auth: false,
+        params: [],
+        exampleRequest: {
+          curl: `curl ${BASE}/robots.txt`,
+          js: `const { data } = await axios.get('${BASE}/robots.txt');`,
+        },
+        exampleResponse: `User-agent: *
+Allow: /
+Sitemap: https://community.voltexahub.com/sitemap.xml`,
+      },
+      {
+        method: 'GET',
+        path: '/api/admin/settings/seo',
+        id: 'admin-seo-get',
+        description: 'Get the current SEO configuration.',
+        auth: true,
+        admin: true,
+        params: [],
+        exampleRequest: {
+          curl: `curl ${BASE}/api/admin/settings/seo \\
+  -H "Authorization: Bearer {token}"`,
+          js: `const { data } = await axios.get('${BASE}/api/admin/settings/seo', {
+  headers: { Authorization: \`Bearer \${token}\` }
+});`,
+        },
+        exampleResponse: `{
+  "seo_title_format": "{page} — {forum}",
+  "seo_description": "A VoltexaHub community.",
+  "seo_og_image": "https://community.voltexahub.com/og-image.png",
+  "seo_twitter_handle": "@voltexahub",
+  "seo_sitemap_enabled": true,
+  "seo_robots_txt": "User-agent: *\\nAllow: /\\nSitemap: ...",
+  "seo_noindex": false
+}`,
+      },
+      {
+        method: 'PUT',
+        path: '/api/admin/settings/seo',
+        id: 'admin-seo-update',
+        description: 'Update SEO settings.',
+        auth: true,
+        admin: true,
+        params: [
+          { name: 'seo_title_format', location: 'body', type: 'string', required: false, description: 'Page title format. Use {page} and {forum} as placeholders.' },
+          { name: 'seo_description', location: 'body', type: 'string', required: false, description: 'Default meta description.' },
+          { name: 'seo_og_image', location: 'body', type: 'string', required: false, description: 'Open Graph image URL.' },
+          { name: 'seo_twitter_handle', location: 'body', type: 'string', required: false, description: 'Twitter handle for card attribution.' },
+          { name: 'seo_sitemap_enabled', location: 'body', type: 'boolean', required: false, description: 'Enable or disable the sitemap.' },
+          { name: 'seo_robots_txt', location: 'body', type: 'string', required: false, description: 'Custom robots.txt content.' },
+          { name: 'seo_noindex', location: 'body', type: 'boolean', required: false, description: 'Noindex the entire site.' },
+        ],
+        exampleRequest: {
+          curl: `curl -X PUT ${BASE}/api/admin/settings/seo \\
+  -H "Authorization: Bearer {token}" \\
+  -H "Content-Type: application/json" \\
+  -d '{"seo_sitemap_enabled": true, "seo_description": "My community forum."}'`,
+          js: `await axios.put('${BASE}/api/admin/settings/seo', {
+  seo_sitemap_enabled: true,
+  seo_description: 'My community forum.'
+}, { headers: { Authorization: \`Bearer \${token}\` } });`,
+        },
+        exampleResponse: `{ "message": "SEO settings updated." }`,
+      },
+    ],
+  },
+  {
+    name: 'System',
+    id: 'system',
+    endpoints: [
+      {
+        method: 'GET',
+        path: '/api/admin/system/stats',
+        id: 'system-stats',
+        description: 'Returns live server metrics. Requires admin authentication.',
+        auth: true,
+        admin: true,
+        params: [],
+        exampleRequest: {
+          curl: `curl ${BASE}/api/admin/system/stats \\
+  -H "Authorization: Bearer {token}"`,
+          js: `const { data } = await axios.get('${BASE}/api/admin/system/stats', {
+  headers: { Authorization: \`Bearer \${token}\` }
+});`,
+        },
+        exampleResponse: `{
+  "data": {
+    "disk": { "total": 53687091200, "used": 12884901888, "free": 40802189312, "percent": 24 },
+    "memory": { "total": 4294967296, "used": 2147483648, "free": 2147483648, "percent": 50 },
+    "cpu": { "load_1": "0.45", "load_5": "0.32", "load_15": "0.28" },
+    "uptime": { "seconds": 864000, "human": "10d 0h 0m" },
+    "database": { "name": "voltexahub", "size": 52428800 },
+    "versions": { "php": "8.4.4", "laravel": "12.0.0" }
+  }
+}`,
+      },
+    ],
+  },
+  {
+    name: 'Plugins',
+    id: 'plugins',
+    endpoints: [
+      {
+        method: 'GET',
+        path: '/api/admin/plugins',
+        id: 'plugins-list',
+        description: 'List all installed plugins with their status.',
+        auth: true,
+        admin: true,
+        params: [],
+        exampleRequest: {
+          curl: `curl ${BASE}/api/admin/plugins \\
+  -H "Authorization: Bearer {token}"`,
+          js: `const { data } = await axios.get('${BASE}/api/admin/plugins', {
+  headers: { Authorization: \`Bearer \${token}\` }
+});`,
+        },
+        exampleResponse: `{
+  "plugins": [
+    {
+      "slug": "announcements",
+      "name": "Announcements",
+      "version": "1.0.0",
+      "description": "Site-wide announcement banners.",
+      "author": "VoltexaHub",
+      "enabled": true,
+      "frontend": true
+    }
+  ]
+}`,
+      },
+      {
+        method: 'POST',
+        path: '/api/admin/plugins/{slug}/toggle',
+        id: 'plugins-toggle',
+        description: 'Activate or deactivate a plugin. If the plugin has frontend components, activating triggers a frontend rebuild.',
+        auth: true,
+        admin: true,
+        params: [
+          { name: 'slug', location: 'path', type: 'string', required: true, description: 'The plugin slug.' },
+        ],
+        exampleRequest: {
+          curl: `curl -X POST ${BASE}/api/admin/plugins/announcements/toggle \\
+  -H "Authorization: Bearer {token}"`,
+          js: `await axios.post('${BASE}/api/admin/plugins/announcements/toggle', {}, {
+  headers: { Authorization: \`Bearer \${token}\` }
+});`,
+        },
+        exampleResponse: `{
+  "message": "Plugin activated successfully.",
+  "plugin": { "slug": "announcements", "enabled": true },
+  "building": true
+}`,
+      },
+      {
+        method: 'DELETE',
+        path: '/api/admin/plugins/{slug}',
+        id: 'plugins-uninstall',
+        description: 'Uninstall a plugin. Rolls back its migrations and removes it from the installed list.',
+        auth: true,
+        admin: true,
+        params: [
+          { name: 'slug', location: 'path', type: 'string', required: true, description: 'The plugin slug.' },
+        ],
+        exampleRequest: {
+          curl: `curl -X DELETE ${BASE}/api/admin/plugins/my-plugin \\
+  -H "Authorization: Bearer {token}"`,
+          js: `await axios.delete('${BASE}/api/admin/plugins/my-plugin', {
+  headers: { Authorization: \`Bearer \${token}\` }
+});`,
+        },
+        exampleResponse: `{ "message": "Plugin uninstalled successfully." }`,
+      },
+    ],
+  },
 ]
