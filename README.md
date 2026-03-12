@@ -1,5 +1,39 @@
-# Vue 3 + Vite
+# VoltexaHub API Reference
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+The API reference site for [VoltexaHub](https://voltexahub.com) — built with Vue 3 + Vite + Tailwind CSS.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+Stripe-style API reference with dark/light mode, code examples in cURL and JavaScript, and full endpoint documentation.
+
+## Stack
+
+- Vue 3 + Vite
+- Tailwind CSS
+
+## Development
+
+```bash
+npm install
+npm run dev
+```
+
+## Production Build
+
+```bash
+npm run build
+```
+
+## Deploy (VPS)
+
+```bash
+git pull origin main && npm run build
+```
+
+## Links
+
+- **Live site:** https://api.voltexahub.com
+- **Docs:** https://docs.voltexahub.com
+- **Forum platform:** https://github.com/VoltexaHub/voltexahub
+
+## License
+
+MIT
